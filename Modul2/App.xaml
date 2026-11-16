@@ -4,6 +4,22 @@
              xmlns:local="clr-namespace:Modul2"
              StartupUri="Vhod.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            
+            <SolidColorBrush x:Key="MainBackground" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="SecondaryBackground" Color="#F5DEB3"/>
+            <SolidColorBrush x:Key="Accent" Color="#F5DEB3"/>
+            <SolidColorBrush x:Key="HighSaleBackgorund" Color="#FFDEAD"/>
+
+            <Style TargetType="Window">
+                <Setter Property="FontFamily" Value="Arial"/>
+                <Setter Property="Background" Value="{StaticResource MainBackground}"/>
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource Accent}"/>
+            </Style>
+            
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
