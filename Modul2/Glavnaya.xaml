@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Glavnaya" Height="450" Width="800">
     <Grid>
-        
+        <ListView x:Name="CardsContainer">
+        </ListView>
     </Grid>
 </Window>

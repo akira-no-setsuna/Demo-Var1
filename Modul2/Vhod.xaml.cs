@@ -31,7 +31,9 @@ namespace Modul2
 
         private void QuestSignInButton_Click(object sender, RoutedEventArgs e)
         {
-
+            var win = new Glavnaya();
+            win.Show();
+            this.Close();
         }
     }
 }

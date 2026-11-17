@@ -17,11 +17,22 @@ namespace Modul2
     /// <summary>
     /// Логика взаимодействия для KartochkaTovara.xaml
     /// </summary>
-    public partial class KartochkaTovara : Window
+    public partial class KartochkaTovara : UserControl
     {
-        public KartochkaTovara()
+        public KartochkaTovara
+            (
+            string name,
+            string category
+            
+            )
         {
             InitializeComponent();
+
+            Name.Text = name;
+            Category.Text = category;
         }
+
+        
+
     }
 }
