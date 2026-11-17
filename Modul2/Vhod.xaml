@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Modul2"
         mc:Ignorable="d"
-        Title="Vhod" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Vhod" Height="298" Width="265">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBox TextWrapping="Wrap" Text="Логин" Width="120" x:Name="Login_TextBox"/>
+        <TextBox TextWrapping="Wrap" Text="Пароль" Width="120" x:Name="Password_TextBox"/>
+        <Button Content="Войти" Click="SignInButton_Click"/>
+        <Button Content="Войти как гость" Click="QuestSignInButton_Click"/>
+
+    </StackPanel>
 </Window>

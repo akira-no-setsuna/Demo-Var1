@@ -23,5 +23,15 @@ namespace Modul2
         {
             InitializeComponent();
         }
+
+        private void SignInButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void QuestSignInButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
