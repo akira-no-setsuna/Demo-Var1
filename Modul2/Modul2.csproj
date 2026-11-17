@@ -70,6 +70,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Glavnaya.xaml.cs">
+      <DependentUpon>Glavnaya.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="KartochkaTovara.xaml.cs">
+      <DependentUpon>KartochkaTovara.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vhod.xaml.cs">
       <DependentUpon>Vhod.xaml</DependentUpon>
     </Compile>
@@ -77,6 +83,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Glavnaya.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="KartochkaTovara.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Vhod.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
