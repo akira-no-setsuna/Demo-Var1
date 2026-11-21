@@ -8,6 +8,12 @@
         Title="Glavnaya" Height="450" Width="800">
     <Grid>
         <ListView x:Name="CardsContainer">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <!-- Указываем, что каждый элемент отрисовывается через наш UserControl -->
+                    <local:KartochkaTovara />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
         </ListView>
     </Grid>
 </Window>

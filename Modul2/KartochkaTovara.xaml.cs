@@ -19,20 +19,10 @@ namespace Modul2
     /// </summary>
     public partial class KartochkaTovara : UserControl
     {
-        public KartochkaTovara
-            (
-            string name,
-            string category
-            
-            )
+        public KartochkaTovara()
         {
             InitializeComponent();
-
-            Name.Text = name;
-            Category.Text = category;
         }
-
-        
 
     }
 }

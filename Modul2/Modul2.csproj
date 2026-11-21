@@ -203,20 +203,20 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="resourses\1.JPG" />
-    <Resource Include="resourses\10.JPG" />
-    <Resource Include="resourses\2.JPG" />
-    <Resource Include="resourses\3.JPG" />
-    <Resource Include="resourses\4.JPG" />
-    <Resource Include="resourses\5.JPG" />
-    <Resource Include="resourses\6.JPG" />
-    <Resource Include="resourses\7.JPG" />
-    <Resource Include="resourses\8.JPG" />
-    <Resource Include="resourses\9.JPG" />
-    <Resource Include="resourses\icon.ico" />
-    <Resource Include="resourses\icon.jpg" />
-    <Resource Include="resourses\icon.png" />
-    <Resource Include="resourses\picture.png" />
+    <Resource Include="resourсes\1.JPG" />
+    <Resource Include="resourсes\10.JPG" />
+    <Resource Include="resourсes\2.JPG" />
+    <Resource Include="resourсes\3.JPG" />
+    <Resource Include="resourсes\4.JPG" />
+    <Resource Include="resourсes\5.JPG" />
+    <Resource Include="resourсes\6.JPG" />
+    <Resource Include="resourсes\7.JPG" />
+    <Resource Include="resourсes\8.JPG" />
+    <Resource Include="resourсes\9.JPG" />
+    <Resource Include="resourсes\icon.ico" />
+    <Resource Include="resourсes\icon.jpg" />
+    <Resource Include="resourсes\icon.png" />
+    <Resource Include="resourсes\picture.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

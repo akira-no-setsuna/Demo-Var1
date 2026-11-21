@@ -10,31 +10,37 @@
     <Border Padding="10" Margin="5">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
             <Image Source="{Binding PhotoPath}" Stretch="Uniform" Margin="5" Grid.Column="0"/>
 
             <Border Grid.Column="2" Padding="10,5">
                 <StackPanel VerticalAlignment="Center" Background="{StaticResource SecondaryBackground}">
-                    <WrapPanel>
-                        <TextBlock x:Name="Category"/>
-                        <TextBlock x:Name="Name"/>
-                    </WrapPanel>
+                    <TextBlock Text="{Binding CategoryAndName}" TextWrapping="Wrap" FontWeight="Bold"/>
                     <TextBlock Text="{Binding Description, StringFormat='Описание товара: {0}'}" TextWrapping="Wrap" />
-                    <TextBlock Text="{Binding Manufacturer, StringFormat='Производитель: {0}'}" />
+                    <TextBlock Text="{Binding Manufacturer, StringFormat='Производитель: {0}'}"  />
                     <TextBlock Text="{Binding Supplier, StringFormat='Поставщик: {0}'}" />
-                    <TextBlock Text="{Binding Price, StringFormat='Цена: {0:N2} руб.'}" />
-                    <TextBlock Text="{Binding Unit, StringFormat='Единица измерения: {0}'}" />
-                    <TextBlock Text="{Binding StockQuantity, StringFormat='Количество на складе: {0}'}" />
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Цена: " />
+                        <TextBlock Text="{Binding Cost}" 
+                                   Foreground="Red"
+                                   TextDecorations="Strikethrough"
+                                   Visibility="{Binding HasSale}" />
+                        <TextBlock Text="{Binding FinalCost, StringFormat=' {0:N2} руб.'}" />
+                    </StackPanel>
+                    
+                    <TextBlock Text="Единица измерения: Штуки" />
+                    <TextBlock Text="{Binding Quantity, StringFormat='Количество на складе: {0}'}" />
                 </StackPanel>
             </Border>
 
-            <Border Grid.Column="4" Padding="5">
+            <Border Grid.Column="4" Padding="5" Background="{Binding SaleBackground}">
                 <TextBlock Text="{Binding Sale, StringFormat='Действующая скидка;{0}%'}"
                        TextAlignment="Center"
                        TextWrapping="Wrap"
