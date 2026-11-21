@@ -26,12 +26,30 @@ namespace Modul2
 
         private void SignInButton_Click(object sender, RoutedEventArgs e)
         {
+            string login = Login_TextBox.Text.Trim();
+            string password = PasswordBox.Password;
+
+            using (var db = new user04Entities())
+            { 
+                var user = db.User.FirstOrDefault(u => u.Login == login && u.Password == password);
+
+                if (user != null)
+                {
+                    var win = new Glavnaya(user.FullName, (int)user.UserRole.RoleID);
+                    win.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неверный логин или пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
 
         }
 
         private void QuestSignInButton_Click(object sender, RoutedEventArgs e)
         {
-            var win = new Glavnaya();
+            var win = new Glavnaya("Гость", 0);
             win.Show();
             this.Close();
         }

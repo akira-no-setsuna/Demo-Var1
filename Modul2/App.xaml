@@ -8,7 +8,7 @@
             
             <SolidColorBrush x:Key="MainBackground" Color="#FFFFFF"/>
             <SolidColorBrush x:Key="SecondaryBackground" Color="#F5DEB3"/>
-            <SolidColorBrush x:Key="Accent" Color="#F5DEB3"/>
+            <SolidColorBrush x:Key="Accent" Color="#DEB887"/>
             <SolidColorBrush x:Key="HighSaleBackgorund" Color="#FFDEAD"/>
 
             <Style TargetType="Window">

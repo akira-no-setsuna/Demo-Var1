@@ -11,9 +11,13 @@ namespace Modul2
 {
     public partial class Glavnaya : Window
     {
-        public Glavnaya()
+        public Glavnaya(
+            string user, int role)
         {
             InitializeComponent();
+
+            UserFullName.Content = user;
+
             LoadProducts();
         }
 
@@ -35,7 +39,7 @@ namespace Modul2
 
                         FinalCost = t.Cost - (t.Cost * t.Sale / 100m),
                         HasSale = t.Sale > 0 ? Visibility.Visible : Visibility.Collapsed,
-                        SaleBackground = t.Sale > 17 ? "#FFDEAD" : "Transparent"
+                        RowBackground = t.Quantity == 0 ? "Grey" : (t.Sale > 17 ? "#FFDEAD" : "Transparent")
                     }).ToList();
 
                 CardsContainer.Items.Clear();
@@ -45,6 +49,11 @@ namespace Modul2
             }
         }
 
-       
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new Vhod();
+            win.Show();
+            this.Close();
+        }
     }
 }
