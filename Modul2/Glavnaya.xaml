@@ -37,6 +37,13 @@
                 <ComboBoxItem Content="По возрастанию количества"/>
                 <ComboBoxItem Content="По убыванию количества"/>
             </ComboBox>
+
+            <ComboBox x:Name="FiltrationComboBox"
+                      Width="230"
+                      SelectedIndex="0"
+                      SelectionChanged="SortComboBox_SelectionChanged">
+                <ComboBoxItem Content="Все поставщики"/>
+            </ComboBox>
         </StackPanel>
 
         <ListView Grid.Row="2" x:Name="CardsContainer">

@@ -18,7 +18,7 @@ namespace Modul2
 
             UserFullName.Content = user;
 
-            StaffPanel.Visibility = (role == (int)Role.Admin || role == (int)Role.Manager) ? Visibility.Visible : Visibility.Hidden;
+            // StaffPanel.Visibility = (role == (int)Role.Admin || role == (int)Role.Manager) ? Visibility.Visible : Visibility.Hidden;
 
 
             LoadProducts();
@@ -38,10 +38,23 @@ namespace Modul2
             {
                 using (var db = new user04Entities())
                 {
-                    var productsView = db.Tovar
+                    string search = SearchTextBox.Text.ToLower();
+
+                    var query = string.IsNullOrEmpty(search)
+                        ? db.Tovar
+                        : db.Tovar.Where(t =>
+                            t.Name.ToLower().Contains(search) ||
+                            t.Descriprion.ToLower().Contains(search) ||
+                            t.AtributiTovara.Categoria.Name.ToLower().Contains(search) ||
+                            t.AtributiTovara.Proizvoditel.Name.ToLower().Contains(search) ||
+                            t.AtributiTovara.Postavshik.Name.ToLower().Contains(search)
+                        );
+
+
+                    var productsView = query
                         .Select(t => new
                         {
-                            PhotoPath = "resourсes\\" + t.Image ?? "1.JPG",
+                            PhotoPath = "resources\\" + t.Image,
                             CategoryAndName = t.Name + " | " + (t.AtributiTovara.Categoria.Name ?? "Не указана"),
                             Description = t.Descriprion,
                             Manufacturer = t.AtributiTovara.Proizvoditel.Name ?? "Не указан",
@@ -97,7 +110,8 @@ namespace Modul2
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            if (CardsContainer == null) return;
+            LoadProducts();
         }
     }
 }

@@ -23,13 +23,5 @@ namespace Modul2
         {
             InitializeComponent();
         }
-
-        private void Tovar_ImageFailed(object sender, ExceptionRoutedEventArgs e)
-        {
-            var img = (Image)sender;
-            if (img.Tag as string == "placeholder") return;
-            img.Tag = "placeholder";
-            img.Source = new BitmapImage(new Uri("resourсes/picture.png", UriKind.Relative));
-        }
     }
 }
