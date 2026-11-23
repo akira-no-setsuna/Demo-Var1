@@ -9,23 +9,42 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row = "0"  Background="{StaticResource SecondaryBackground}"
-            LastChildFill="False">
-            <Button Content="Выход"  DockPanel.Dock="Right" Background="{StaticResource Accent}" Width="70" Click="ExitButton_Click"/>
-            <Label x:Name = "UserFullName" DockPanel.Dock="Right"/>
+
+        <DockPanel Grid.Row="0" Background="{StaticResource SecondaryBackground}"
+                   LastChildFill="False">
+            <Button Content="Выход" DockPanel.Dock="Right" Background="{StaticResource Accent}"
+                    Width="70" Click="ExitButton_Click"/>
+            <Label x:Name="UserFullName" DockPanel.Dock="Right"/>
             <Image Source="/resourсes/icon.png" Stretch="Fill" Width="30"/>
         </DockPanel>
 
-        <ListView  Grid.Row = "1" x:Name="CardsContainer" >
+        <StackPanel x:Name="StaffPanel"  Grid.Row="1" Orientation="Horizontal" Margin="5">
+            <TextBox x:Name="SearchTextBox" 
+                     Width="250" 
+                     Margin="0,0,10,0"
+                     TextChanged="SearchTextBox_TextChanged">
+            </TextBox>
+
+            <ComboBox x:Name="SortComboBox"
+                      Width="230"
+                      SelectedIndex="0"
+                      SelectionChanged="SortComboBox_SelectionChanged">
+                <ComboBoxItem Content="Без сортировки"/>
+                <ComboBoxItem Content="По возрастанию количества"/>
+                <ComboBoxItem Content="По убыванию количества"/>
+            </ComboBox>
+        </StackPanel>
+
+        <ListView Grid.Row="2" x:Name="CardsContainer">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <local:KartochkaTovara />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListView>
-
     </Grid>
 </Window>

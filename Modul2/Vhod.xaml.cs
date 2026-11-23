@@ -49,7 +49,7 @@ namespace Modul2
 
         private void QuestSignInButton_Click(object sender, RoutedEventArgs e)
         {
-            var win = new Glavnaya("Гость", 0);
+            var win = new Glavnaya("Гость", 4);
             win.Show();
             this.Close();
         }
