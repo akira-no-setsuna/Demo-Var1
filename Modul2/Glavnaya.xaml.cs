@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity; // Обязательно для метода .Include()
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,18 +19,30 @@ namespace Modul2
 
             UserFullName.Content = user;
 
-            // StaffPanel.Visibility = (role == (int)Role.Admin || role == (int)Role.Manager) ? Visibility.Visible : Visibility.Hidden;
+            // StaffPanel.Visibility = (role == (int)Role.Admin || role == (int)Role.Manager) ? Visibility.Visible : Visibility.Collapsed;
+            // AdminPanel.Visibility = (role == (int)Role.Admin) ? Visibility.Visible : Visibility.Collapsed;
 
-
+            LoadSupliers();
             LoadProducts();
+        }
+
+        private void LoadSupliers()
+        {
+            using (var db = new user04Entities())
+            {
+                var supliers = db.Postavshik;
+
+                foreach (var suplier in supliers)
+                    FiltrationComboBox.Items.Add(suplier.Name);
+            }
         }
 
         enum Role
         {
-        Admin = 1,
-        Manager = 2,
-        Client = 3,
-        Quest = 4,
+            Admin = 1,
+            Manager = 2,
+            Client = 3,
+            Quest = 4,
         }
 
         private void LoadProducts()
@@ -50,6 +63,23 @@ namespace Modul2
                             t.AtributiTovara.Postavshik.Name.ToLower().Contains(search)
                         );
 
+                    switch (SortComboBox.SelectedIndex)
+                    {
+                        case 1:
+                            query = query.OrderBy(q => q.Quantity);
+                            break;
+                        case 2:
+                            query = query.OrderByDescending(q => q.Quantity);
+                            break;
+                        default:
+                            query = query.OrderBy(q => q.Name);
+                            break;
+                    }
+
+                    if (FiltrationComboBox.SelectedIndex != 0)
+                        query = query
+                            .Where(t => t.AtributiTovara.Postavshik.Name.Contains((string)FiltrationComboBox.SelectedValue));
+
 
                     var productsView = query
                         .Select(t => new
@@ -67,23 +97,6 @@ namespace Modul2
                             HasSale = t.Sale > 0 ? Visibility.Visible : Visibility.Collapsed,
                             RowBackground = t.Quantity == 0 ? "#808080" : (t.Sale > 17 ? "#FFDEAD" : "Transparent")
                         });
-
-
-
-
-                    switch (SortComboBox.SelectedIndex)
-                    {
-                        case 1:
-                            productsView = productsView.OrderBy(p => p.Quantity);
-                            break;
-                        case 2:
-                            productsView = productsView.OrderByDescending(p => p.Quantity);
-                            break;
-                        default:
-                            productsView = productsView.OrderBy(p => p.CategoryAndName);
-                            break;
-                    }
-
                     CardsContainer.ItemsSource = productsView.ToList();
                 }
             }
@@ -94,6 +107,50 @@ namespace Modul2
             }
             
         }
+
+        private void AddProduct_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void DeleteProduct_Click(object sender, RoutedEventArgs e)
+        {
+            if (CardsContainer.SelectedItem is Tovar selectedTovar)
+            {
+                if (MessageBox.Show("Удалить товар?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    using (var db = new user04Entities())
+                    {
+                        // ПРОВЕРКА: есть ли товар в составе заказа (SostavZakaza)
+                        bool isInOrder = db.SostavZakaza.Any(sz => sz.ProductID == selectedTovar.ID);
+
+                        if (isInOrder)
+                        {
+                            MessageBox.Show("Нельзя удалить товар, который есть в заказе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+
+                        // Удаляем старое фото с диска
+                        if (!string.IsNullOrEmpty(selectedTovar.Image) && selectedTovar.Image != "picture.png")
+                        {
+                            string oldPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources", selectedTovar.Image);
+                            if (File.Exists(oldPath)) File.Delete(oldPath);
+                        }
+
+                        // Удаляем из БД
+                        db.Tovar.Remove(selectedTovar);
+                        db.SaveChanges();
+
+                        MessageBox.Show("Товар удален", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        LoadProducts();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите товар для удаления", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
@@ -112,6 +169,11 @@ namespace Modul2
         {
             if (CardsContainer == null) return;
             LoadProducts();
+        }
+
+        private void CardsContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MessageBox.Show("Выберите товар для удаления", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 }
