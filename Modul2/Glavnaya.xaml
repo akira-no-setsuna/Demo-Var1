@@ -16,6 +16,7 @@
             LastChildFill="False">
             <Button Content="Выход"  DockPanel.Dock="Right" Background="{StaticResource Accent}" Width="70" Click="ExitButton_Click"/>
             <Label x:Name = "UserFullName" DockPanel.Dock="Right"/>
+            <Image Source="/resourсes/icon.png" Stretch="Fill" Width="30"/>
         </DockPanel>
 
         <ListView  Grid.Row = "1" x:Name="CardsContainer" >

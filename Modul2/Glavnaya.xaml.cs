@@ -42,6 +42,8 @@ namespace Modul2
                         RowBackground = t.Quantity == 0 ? "Grey" : (t.Sale > 17 ? "#FFDEAD" : "Transparent")
                     }).ToList();
 
+
+
                 CardsContainer.Items.Clear();
 
 
