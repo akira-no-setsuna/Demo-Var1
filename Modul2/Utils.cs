@@ -3,26 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Modul2
 {
     public static class Utils
     {
-        public static BitmapImage FoundImage(this string name)
+        public static ImageSource FoundImage(this string imageName)
         {
-            string fullPath = System.IO.Path.GetFullPath($@"Resources\{name}");
+            if (string.IsNullOrWhiteSpace(imageName))
+                return null;
 
             try
             {
-                return new BitmapImage(new Uri(fullPath, UriKind.Absolute));
-            }
-            catch (Exception)
-            {
-                fullPath = System.IO.Path.GetFullPath($@"Resources\picture.png");
-                return new BitmapImage(new Uri(fullPath, UriKind.Absolute));
-            }
+                string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", imageName);
 
+                if (!System.IO.File.Exists(path))
+                    path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "picture.png");
+
+                if (!System.IO.File.Exists(path)) return null;
+
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+
+                bitmap.UriSource = new Uri(path);
+                bitmap.EndInit();
+
+                bitmap.Freeze();
+
+                return bitmap;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 

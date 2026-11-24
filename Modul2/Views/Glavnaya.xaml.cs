@@ -91,7 +91,7 @@ namespace Modul2
                         .Select(t => new TovarDto
                         {
                             ID = t.ID,
-                            PhotoPath = t.Image.FoundImage(),
+                            PhotoPath = (BitmapImage)t.Image.FoundImage(),
                             Name = t.Name,
                             Category = t.AtributiTovara.Categoria.Name,
                             CategoryAndName = t.Name + " | " + t.AtributiTovara.Categoria.Name,
@@ -126,6 +126,7 @@ namespace Modul2
 
         private void AddProduct_Click(object sender, RoutedEventArgs e)
         {
+            new RedactirovanieTovara(null).Show();
         }
 
         private void DeleteProduct_Click(object sender, RoutedEventArgs e)
@@ -195,10 +196,6 @@ namespace Modul2
                     new RedactirovanieTovara(db.Tovar.FirstOrDefault(t => t.ID == tovar.ID)).Show();
             }
 
-        }
-
-        private void CardsContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
         }
     }
 }

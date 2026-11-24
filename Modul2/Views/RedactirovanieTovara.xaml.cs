@@ -1,5 +1,4 @@
-﻿
-using Modul2.DTOs;
+﻿using Modul2.DTOs;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,16 +18,22 @@ namespace Modul2.Views
     {
         private Tovar _tovar;
         private bool _isNew;
+
         public RedactirovanieTovara(Tovar tovar)
         {
             InitializeComponent();
 
-            _isNew = (tovar ==  null);
-            _tovar = tovar;
+            _isNew = (tovar == null);
+            _tovar = tovar ?? new Tovar();
+
+            if (_isNew)
+            {
+                Title = "DobavlenieTovara";
+                _tovar.AtributiTovara = new AtributiTovara();
+            }
 
             LoadComboBoxes();
             FillFields();
-
         }
 
         private void LoadComboBoxes()
@@ -47,18 +52,14 @@ namespace Modul2.Views
             {
                 TbId.IsReadOnly = true;
                 TbId.Background = Brushes.Gray;
-
                 TovarPhoto.Source = _tovar.Image.FoundImage();
-
-                this.DataContext = _tovar;
-
             }
+
+            this.DataContext = _tovar;
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (_tovar == null) return;
-
             // 1. Валидация
             if (string.IsNullOrWhiteSpace(_tovar.Name))
             {
@@ -92,6 +93,8 @@ namespace Modul2.Views
             }
 
             // 2. Сохранение
+            string oldImage = null;
+
             try
             {
                 using (var db = new user04Entities())
@@ -112,6 +115,8 @@ namespace Modul2.Views
                             return;
                         }
 
+                        oldImage = t.Image;   // запоминаем ДО перезаписи
+
                         t.Name = _tovar.Name;
                         t.Descriprion = _tovar.Descriprion;
                         t.Cost = _tovar.Cost;
@@ -129,24 +134,97 @@ namespace Modul2.Views
 
                     db.SaveChanges();
                 }
-
-                MessageBox.Show("Товар успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка сохранения: " + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
+
+            // 3. Удаляем старое фото (если поменялось и это не заглушка)
+            if (!string.IsNullOrEmpty(oldImage)
+    && !string.Equals(oldImage, "picture.png", StringComparison.OrdinalIgnoreCase)
+    && !string.Equals(oldImage, _tovar.Image, StringComparison.OrdinalIgnoreCase))
+            {
+                string path = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Resources",
+                    Path.GetFileName(oldImage));
+
+                try
+                {
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+                catch (Exception ex)
+                {
+                    // ВРЕМЕННО: показываем ошибку
+                    MessageBox.Show("Не удалось удалить файл: \n" + ex.Message, "Ошибка удаления");
+                }
+            }
+
+            MessageBox.Show("Товар успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
 
         private void BtnSelectImage_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Выберите изображение товара",
+                Filter = "Изображения (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png",
+                RestoreDirectory = true
+            };
 
+            if (dialog.ShowDialog() != true)
+                return;
+
+            try
+            {
+                // 1. Загружаем в память (OnLoad не блокирует исходный файл)
+                var original = new BitmapImage();
+                original.BeginInit();
+                original.CacheOption = BitmapCacheOption.OnLoad;
+                original.UriSource = new Uri(dialog.FileName);
+                original.EndInit();
+                original.Freeze();
+
+                // 2. Уменьшаем пропорционально
+                double scale = Math.Min(300.0 / original.PixelWidth, 200.0 / original.PixelHeight);
+                if (scale > 1) scale = 1;
+                var resized = new TransformedBitmap(original, new ScaleTransform(scale, scale));
+                resized.Freeze();
+
+                // 3. Всегда генерируем новое уникальное имя
+                string folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+                Directory.CreateDirectory(folder);
+
+                string newFileName = Guid.NewGuid().ToString("N").Substring(0, 6) + ".jpg";
+                string fullPath = Path.Combine(folder, newFileName);
+
+                // 4. Сохраняем новый файл
+                var encoder = new JpegBitmapEncoder { QualityLevel = 90 };
+                encoder.Frames.Add(BitmapFrame.Create(resized));
+
+                using (var fs = new FileStream(fullPath, FileMode.Create))
+                {
+                    encoder.Save(fs);
+                }
+
+                // 5. Обновляем данные и показываем превью
+                _tovar.Image = newFileName;
+                TovarPhoto.Source = resized;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка загрузки изображения: " + ex.Message,
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
