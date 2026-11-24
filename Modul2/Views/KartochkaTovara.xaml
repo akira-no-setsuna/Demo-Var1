@@ -18,8 +18,8 @@
             </Grid.ColumnDefinitions>
 
             <Image Source="{Binding PhotoPath, 
-                FallbackValue='pack://application:,,,/resources/picture.png', 
-                TargetNullValue='pack://application:,,,/resources/picture.png'}" />
+                FallbackValue='pack://application:,,,/Resources/picture.png', 
+                TargetNullValue='pack://application:,,,/Resources/picture.png'}" />
 
             <Border Grid.Column="2" Padding="10,5">
                 <StackPanel VerticalAlignment="Center">

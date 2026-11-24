@@ -51,7 +51,7 @@
             </ComboBox>
         </StackPanel>
 
-        <ListView Grid.Row="3" x:Name="CardsContainer" SelectionChanged="CardsContainer_SelectionChanged">
+        <ListView Grid.Row="3" x:Name="CardsContainer" MouseLeftButtonUp="CardsContainer_MouseLeftButtonUp" SelectionChanged="CardsContainer_SelectionChanged">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <local:KartochkaTovara />

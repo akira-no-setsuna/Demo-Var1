@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Modul2.DTOs;
+using Modul2.Views;
+using System;
+using System.CodeDom;
 using System.Data.Entity; // Обязательно для метода .Include()
 using System.IO;
 using System.Linq;
@@ -35,6 +38,9 @@ namespace Modul2
                 foreach (var suplier in supliers)
                     FiltrationComboBox.Items.Add(suplier.Name);
             }
+
+
+
         }
 
         enum Role
@@ -80,24 +86,34 @@ namespace Modul2
                         query = query
                             .Where(t => t.AtributiTovara.Postavshik.Name.Contains((string)FiltrationComboBox.SelectedValue));
 
-
                     var productsView = query
-                        .Select(t => new
+                        .ToList()
+                        .Select(t => new TovarDto
                         {
-                            PhotoPath = "resources\\" + t.Image,
-                            CategoryAndName = t.Name + " | " + (t.AtributiTovara.Categoria.Name ?? "Не указана"),
+                            ID = t.ID,
+                            PhotoPath = t.Image.FoundImage(),
+                            Name = t.Name,
+                            Category = t.AtributiTovara.Categoria.Name,
+                            CategoryAndName = t.Name + " | " + t.AtributiTovara.Categoria.Name,
                             Description = t.Descriprion,
                             Manufacturer = t.AtributiTovara.Proizvoditel.Name ?? "Не указан",
                             Supplier = t.AtributiTovara.Postavshik.Name ?? "Не указана",
-                            Cost = t.Cost,
-                            Quantity = t.Quantity,
-                            Sale = t.Sale,
 
-                            FinalCost = t.Cost - (t.Cost * t.Sale / 100m),
-                            HasSale = t.Sale > 0 ? Visibility.Visible : Visibility.Collapsed,
-                            RowBackground = t.Quantity == 0 ? "#808080" : (t.Sale > 17 ? "#FFDEAD" : "Transparent")
+                            Cost = (int)(t.Cost ?? -1),
+                            Quantity = t.Quantity ?? -1,
+                            Sale = t.Sale ?? -1,
+
+                            FinalCost = (int)((t.Cost ?? 0) - ((t.Cost ?? 0) * (t.Sale ?? 0) / 100m)),
+                            HasSale = (t.Sale ?? 0) > 0 ? Visibility.Visible : Visibility.Collapsed,
+                            RowBackground = (t.Quantity ?? 0) == 0 ? "#808080" : ((t.Sale ?? 0) > 17 ? "#FFDEAD" : "Transparent"),
+
+                            CategoryId = (int)t.AtributiTovara.CategoryID,
+                            ManufacturerId = (int)t.AtributiTovara.ManufacturerID,
+                            SupplierId = (int)t.AtributiTovara.SuplierID
                         });
-                    CardsContainer.ItemsSource = productsView.ToList();
+
+                    CardsContainer.ItemsSource = productsView;
+
                 }
             }
             catch (Exception)
@@ -128,7 +144,7 @@ namespace Modul2
                             MessageBox.Show("Нельзя удалить товар, который есть в заказе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
-
+                         
                         // Удаляем старое фото с диска
                         if (!string.IsNullOrEmpty(selectedTovar.Image) && selectedTovar.Image != "picture.png")
                         {
@@ -171,9 +187,18 @@ namespace Modul2
             LoadProducts();
         }
 
+        private void CardsContainer_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            using (var db = new user04Entities())
+            {
+                if (CardsContainer.SelectedItem is TovarDto tovar)
+                    new RedactirovanieTovara(db.Tovar.FirstOrDefault(t => t.ID == tovar.ID)).Show();
+            }
+
+        }
+
         private void CardsContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MessageBox.Show("Выберите товар для удаления", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 }

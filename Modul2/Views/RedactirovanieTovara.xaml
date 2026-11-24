@@ -1,0 +1,78 @@
+﻿<Window x:Class="Modul2.Views.RedactirovanieTovara"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Modul2.Views"
+        mc:Ignorable="d"
+        Title="Редактирование товара" 
+        Width="480" 
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Text="ID:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ID}" x:Name="TbId" Margin="0,3"/>
+
+        <TextBlock Grid.Row="1" Text="Наименование:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Name}" Margin="0,3"/>
+
+        <TextBlock Grid.Row="2" Text="Категория:" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="CbCategory" DisplayMemberPath="Name" SelectedValuePath="ID" 
+                  SelectedValue="{Binding AtributiTovara.CategoryID}" Margin="0,3"/>
+
+        <TextBlock Grid.Row="3" Text="Описание:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Descriprion}" Height="45" TextWrapping="Wrap" Margin="0,3"/>
+
+        <TextBlock Grid.Row="4" Text="Производитель:" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="4" Grid.Column="1" x:Name="CbManufacturer" DisplayMemberPath="Name" SelectedValuePath="ID" 
+                  SelectedValue="{Binding AtributiTovara.ManufacturerID}" Margin="0,3"/>
+
+        <TextBlock Grid.Row="5" Text="Поставщик:" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="CbSupplier" DisplayMemberPath="Name" SelectedValuePath="ID" 
+                  SelectedValue="{Binding AtributiTovara.SuplierID}" Margin="0,3"/>
+
+        <TextBlock Grid.Row="6" Text="Цена:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Cost}" Margin="0,3"/>
+
+        <TextBlock Grid.Row="7" Text="Ед. изм.:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="7" Grid.Column="1" Text="шт." IsReadOnly="True" Background="LightGray" Margin="0,3"/>
+
+        <TextBlock Grid.Row="8" Text="Количество:" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Quantity}" Margin="0,3"/>
+
+        <TextBlock Grid.Row="9" Text="Скидка (%):" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Sale}" Margin="0,3"/>
+
+        <TextBlock Grid.Row="10" Text="Фото:" VerticalAlignment="Top" Margin="0,5"/>
+        <StackPanel Grid.Row="10" Grid.Column="1" Margin="0,3">
+            <Image x:Name="TovarPhoto" Height="100" Width="150" Stretch="Uniform" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+            <Button Content="Выбрать фото" Width="150" Height="24" HorizontalAlignment="Left" Click="BtnSelectImage_Click"/>
+        </StackPanel>
+
+        <!-- Исправлен индекс строки на 11 -->
+        <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Сохранить" Width="100" Height="26" Margin="0,0,10,0" Click="BtnSave_Click"/>
+            <Button Content="Отмена" Width="100" Height="26" Click="BtnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
