@@ -131,40 +131,73 @@ namespace Modul2
 
         private void DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (CardsContainer.SelectedItem is Tovar selectedTovar)
-            {
-                if (MessageBox.Show("Удалить товар?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                {
-                    using (var db = new user04Entities())
-                    {
-                        // ПРОВЕРКА: есть ли товар в составе заказа (SostavZakaza)
-                        bool isInOrder = db.SostavZakaza.Any(sz => sz.ProductID == selectedTovar.ID);
-
-                        if (isInOrder)
-                        {
-                            MessageBox.Show("Нельзя удалить товар, который есть в заказе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                         
-                        // Удаляем старое фото с диска
-                        if (!string.IsNullOrEmpty(selectedTovar.Image) && selectedTovar.Image != "picture.png")
-                        {
-                            string oldPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources", selectedTovar.Image);
-                            if (File.Exists(oldPath)) File.Delete(oldPath);
-                        }
-
-                        // Удаляем из БД
-                        db.Tovar.Remove(selectedTovar);
-                        db.SaveChanges();
-
-                        MessageBox.Show("Товар удален", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadProducts();
-                    }
-                }
-            }
-            else
+            if (!(CardsContainer.SelectedItem is TovarDto selectedDto))
             {
                 MessageBox.Show("Выберите товар для удаления", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (MessageBox.Show($"Удалить товар \"{selectedDto.Name}\"?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                using (var db = new user04Entities())
+                {
+                    // 1. Загружаем товар ВМЕСТЕ с его атрибутами (Include)
+                    var tovarToDelete = db.Tovar
+                        .Include(t => t.AtributiTovara)
+                        .FirstOrDefault(t => t.ID == selectedDto.ID);
+
+                    if (tovarToDelete == null)
+                    {
+                        MessageBox.Show("Товар не найден в базе данных.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // 2. Проверка на наличие в заказах
+                    bool isInOrder = db.SostavZakaza.Any(sz => sz.ProductID == tovarToDelete.ID);
+                    if (isInOrder)
+                    {
+                        MessageBox.Show("Нельзя удалить товар, который присутствует в заказе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // 3. УДАЛЯЕМ СВЯЗАННЫЕ АТРИБУТЫ (решение вашей ошибки)
+                    if (tovarToDelete.AtributiTovara != null)
+                    {
+                        db.AtributiTovara.Remove(tovarToDelete.AtributiTovara);
+                    }
+
+                    // 4. Удаляем файл изображения (если он не дефолтный)
+                    if (!string.IsNullOrWhiteSpace(tovarToDelete.Image) && tovarToDelete.Image != "picture.png")
+                    {
+                        string oldPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources", tovarToDelete.Image);
+                        if (File.Exists(oldPath))
+                        {
+                            try { File.Delete(oldPath); }
+                            catch (Exception ex) { MessageBox.Show($"Не удалось удалить фото:\n{ex.Message}", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning); }
+                        }
+                    }
+
+                    // 5. Удаляем сам товар
+                    db.Tovar.Remove(tovarToDelete);
+
+                    // Сохраняем изменения (EF сам поймет, что сначала нужно удалить AtributiTovara, а потом Tovar)
+                    db.SaveChanges();
+                }
+
+                MessageBox.Show("Товар успешно удалён", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadProducts(); // Обновляем список
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException dbEx)
+            {
+                var inner = dbEx.InnerException?.InnerException?.Message ?? dbEx.Message;
+                MessageBox.Show($"Ошибка базы данных:\n{inner}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при удалении товара:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
