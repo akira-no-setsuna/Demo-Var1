@@ -24,7 +24,8 @@
 
         <StackPanel x:Name="AdminPanel" Grid.Row="2" Orientation="Horizontal" Margin="5" Visibility="Visible">
             <Button Content="Добавить товар" Width="150" Margin="0,0,10,0" Click="AddProduct_Click"/>
-            <Button Content="Удалить товар" Width="150" Background="#FFB4B4" Click="DeleteProduct_Click"/>
+            <Button Content="Удалить товар" Width="150" Background="#FFB4B4" Margin="0,0,10,0" Click="DeleteProduct_Click"/>
+            <Button Content="Заказы" Click="btnOrders_Click" Width="150" Background="#FFB4B4" HorizontalAlignment="Right" />
         </StackPanel>
 
         <StackPanel x:Name="StaffPanel"  Grid.Row="1" Orientation="Horizontal" Margin="5">

@@ -230,5 +230,11 @@ namespace Modul2
             }
 
         }
+
+        private void btnOrders_Click(object sender, RoutedEventArgs e)
+        {
+            var zakazyWindow = new Zakazy();
+            zakazyWindow.ShowDialog(); // Или zakazyWindow.Show(); если это страница
+        }
     }
 }

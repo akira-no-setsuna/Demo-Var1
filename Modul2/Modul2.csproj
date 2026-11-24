@@ -215,6 +215,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="DTOs\TovarDto.cs" />
+    <Compile Include="DTOs\ZakazDto.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Views\Glavnaya.xaml.cs">
       <DependentUpon>Glavnaya.xaml</DependentUpon>
@@ -264,12 +265,18 @@
     <Compile Include="Views\RedactirovanieTovara.xaml.cs">
       <DependentUpon>RedactirovanieTovara.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RedactirovanieZakaza.xaml.cs">
+      <DependentUpon>RedactirovanieZakaza.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Vhod.xaml.cs">
       <DependentUpon>Vhod.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Zakazy.xaml.cs">
+      <DependentUpon>Zakazy.xaml</DependentUpon>
     </Compile>
     <Compile Include="Zakaz.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -289,7 +296,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\RedactirovanieZakaza.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Vhod.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Zakazy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

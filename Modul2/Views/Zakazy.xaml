@@ -1,0 +1,35 @@
+﻿<Window x:Class="Modul2.Views.Zakazy"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Modul2.Views"
+        mc:Ignorable="d"
+        Title="Заказы" Height="600" Width="900" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Панель управления -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,15">
+            <TextBlock Text="Список заказов" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button x:Name="btnAdd" Content="Добавить заказ" Click="btnAdd_Click" Padding="15,5" Background="#4CAF50" Foreground="White" BorderThickness="0"/>
+            <!-- Если нужно удаление -->
+            <Button x:Name="btnDelete" Content="Удалить заказ" Click="btnDelete_Click" Padding="15,5" Margin="10,0,0,0" Background="#F44336" Foreground="White" BorderThickness="0"/>
+        </StackPanel>
+
+        <!-- Таблица заказов -->
+        <DataGrid x:Name="dgZakazy" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                  SelectionMode="Single" MouseDoubleClick="dgZakazy_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Артикул заказа" Binding="{Binding Code}" Width="*"/>
+                <DataGridTextColumn Header="Статус заказа" Binding="{Binding StatusText}" Width="*"/>
+                <DataGridTextColumn Header="Адрес пункта выдачи" Binding="{Binding AddressName}" Width="2*"/>
+                <DataGridTextColumn Header="Дата заказа" Binding="{Binding CreateDate, StringFormat='dd.MM.yyyy'}" Width="*"/>
+                <DataGridTextColumn Header="Дата выдачи" Binding="{Binding DeliveryDate, StringFormat='dd.MM.yyyy'}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
